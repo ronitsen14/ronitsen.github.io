@@ -1,0 +1,29 @@
+{
+	"name": "Hello World",
+	"description": "Custom Widget Template",
+	"eula": "",
+	"vendor": "Who created me?",
+	"license": "",
+	"id": "com.sap.sample.template.0",
+	"newInstancePrefix": "WidetTemplate",
+	"version": "0.0.1",
+	"icon": "",
+	"webcomponents": [
+        {
+		"kind": "main",
+		"tag": "",
+            	"url": "https://ronitsen14.github.io/ronitsen.github.io/webcomponent.js",
+            	"integrity": "",
+            	"ignoreIntegrity" : true
+        }
+    ],
+	"properties": {
+	},
+	"methods": {
+	},
+	"events": {
+	}
+}
+
+
+
