@@ -47,7 +47,7 @@
             this.appendChild(tmpl.content.cloneNode(true));
 
             this._props = {
-                JSONUrl: "http://www.rfs.nsw.gov.au/feeds/majorIncidents.json",
+                JSONUrl: "https://ronitsen14.github.io/ronitsen.github.io/majorIncidents.json",
                 RefreshTime: 300
             };
 
