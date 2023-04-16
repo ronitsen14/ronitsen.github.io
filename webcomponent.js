@@ -47,7 +47,7 @@
             this.appendChild(tmpl.content.cloneNode(true));
 
             this._props = {
-                JSONUrl: "https://ronitsen14.github.io/ronitsen.github.io/majorIncidents.json",
+                JSONUrl: "https://www.feedforall.com/sample.xml",
                 RefreshTime: 300
             };
 
