@@ -48,7 +48,7 @@ class RSSDataSource extends HTMLElement {
             this.appendChild(tmpl.content.cloneNode(true));
 
             this._props = {
-                JSONUrl: "http://www.rfs.nsw.gov.au/feeds/majorIncidents.json",
+                JSONUrl: "https://uat.logpoint.com/rss/incidents",
                 RefreshTime: 300
             };
 
