@@ -40,6 +40,8 @@ let tmpl = document.createElement('template');
         </div>
     `;
 
+customElements.define('custom-button', RSSDataSource);
+
 class RSSDataSource extends HTMLElement {
 	constructor() {
 	    super();
@@ -103,5 +105,5 @@ class RSSDataSource extends HTMLElement {
 	}
 }
 
-customElements.define('custom-button', RSSDataSource);
+
 })();
