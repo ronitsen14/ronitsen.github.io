@@ -102,3 +102,6 @@ class RSSDataSource extends HTMLElement {
             this._props = { ...this._props, ...oChangedProperties};
 	}
 }
+
+customElements.define('custom-button', RSSDataSource);
+})();
