@@ -27,14 +27,19 @@
             }
         }
 
-        updateData(url) {
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    this._rawData = data;
-                    this.startRefreshCountdown();
-                });
-        }
+	    
+	updateData(url) {
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        this._rawData = data;
+
+        this.startRefreshCountdown();
+
+        const event = new Event("onDataUpdate");
+        this.dispatchEvent(event);
+    });
+}   
 
         startRefreshCountdown() {
             if(this._refreshTimeout) clearTimeout(this._refreshTimeout);
@@ -65,5 +70,18 @@
 
             this._props = { ...this._props, ...oChangedProperties};
 	}
+	    getRawData() {
+    return this._rawData || {};
+}
+
+getJSONData(type) {
+    let data = {};
+
+    if(type == "raw") {
+        data = this.getRawData();
+    }
+
+    return JSON.stringify(data);
+}
 });
 })();
