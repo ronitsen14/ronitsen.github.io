@@ -1,4 +1,5 @@
-let tmpl = document.createElement('template');
+(function()  {
+    let tmpl = document.createElement('template');
     tmpl.innerHTML = `
         <style>
             .datasource {
@@ -40,54 +41,66 @@ let tmpl = document.createElement('template');
         </div>
     `;
 
-customElements.define('com-sap-sample-helloworld1', class HelloWorld1 extends HTMLElement {
+    customElements.define('com-sap-sample-helloworld1', class RSSDataSource extends HTMLElement {
+	constructor() {
+	    super();
+            this.appendChild(tmpl.content.cloneNode(true));
 
+            this._props = {
+                JSONUrl: "http://www.rfs.nsw.gov.au/feeds/majorIncidents.json",
+                RefreshTime: 300
+            };
 
-		constructor() {
-			super(); 
-			this._shadowRoot = this.attachShadow({mode: "open"});
-            this._shadowRoot.appendChild(tmpl.content.cloneNode(true));
-            this._firstConnection = false;
-		}
+            //Get refrences to our root element
+            this.$div = this.querySelector('div.datasource');
 
-        //Fired when the widget is added to the html DOM of the page
-        connectedCallback(){
-            this._firstConnection = true;
-            this.redraw();
+            //Add the handler for our refresh button 
+            this.$div.querySelector('#refresh').onclick = (e) => this.refresh();
         }
-
-         //Fired when the widget is removed from the html DOM of the page (e.g. by hide)
-        disconnectedCallback(){
         
-        }
-
-         //When the custom widget is updated, the Custom Widget SDK framework executes this function first
-		onCustomWidgetBeforeUpdate(oChangedProperties) {
-
-		}
-
-        //When the custom widget is updated, the Custom Widget SDK framework executes this function after the update
-		onCustomWidgetAfterUpdate(oChangedProperties) {
-            if (this._firstConnection){
-                this.redraw();
+        refresh() {
+            if(this._props["JSONUrl"]) {
+                this.updateData(this._props["JSONUrl"])
             }
         }
-        
-        //When the custom widget is removed from the canvas or the analytic application is closed
-        onCustomWidgetDestroy(){
+
+        updateData(url) {
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    this._rawData = data;
+                    this.startRefreshCountdown();
+                });
         }
 
-        
-        //When the custom widget is resized on the canvas, the Custom Widget SDK framework executes the following JavaScript function call on the custom widget
-        // Commented out by default.  If it is enabled, SAP Analytics Cloud will track DOM size changes and call this callback as needed
-        //  If you don't need to react to resizes, you can save CPU by leaving it uncommented.
-        /*
-        onCustomWidgetResize(width, height){
-            redraw()
-        }
-        */
+        startRefreshCountdown() {
+            if(this._refreshTimeout) clearTimeout(this._refreshTimeout);
 
-        redraw(){
+            this._refreshTimeout = setTimeout(() => this.refresh(), this._props["RefreshTime"] * 1000);
+
+            const end = new Date().getTime() + (this._props["RefreshTime"] * 1000);
+
+            if(this._countdownInterval) clearInterval(this._countdownInterval);
+
+            this._countdownInterval = setInterval(() => {
+                let now = new Date().getTime();
+                let distance = end - now;
+
+                let timestring = distance > 60000 ? Math.floor(distance / (1000 * 60)) + " Minutes" : Math.floor(distance / (1000)) + " Seconds";
+
+                this.$div.querySelector(".refresh-timer .value").innerText = timestring; 
+            }, 1000);
         }
-    });
+
+        onCustomWidgetBeforeUpdate(oChangedProperties) {
+            let oldUrl = this._props['JSONUrl'];
+            let newUrl = oChangedProperties['JSONUrl'];
+
+            if(newUrl != oldUrl) {
+                this.updateData(newUrl);
+            }
+
+            this._props = { ...this._props, ...oChangedProperties};
+	}
+});
 })();
