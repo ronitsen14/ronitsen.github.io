@@ -40,7 +40,7 @@ let tmpl = document.createElement('template');
         </div>
     `;
 
-customElements.define('custom-button', class HelloWorld1 extends HTMLElement {
+customElements.define('com-sap-sample-helloworld1', class HelloWorld1 extends HTMLElement {
 
 
 		constructor() {
